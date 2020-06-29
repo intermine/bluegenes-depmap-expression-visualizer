@@ -1,8 +1,8 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 import Plotly from 'plotly.js';
-import queryData from './queryData';
 import Loading from './components/Loading';
+import queryData from './queryData';
 
 class RootContainer extends React.Component {
 	constructor(props) {
@@ -22,17 +22,17 @@ class RootContainer extends React.Component {
 
 		queryData(value, serviceUrl)
 			.then(res => {
-				const map = {};
+				const mapData = {};
 				res.depMapExpression.forEach(r => {
 
-					if(r.depMapID.Disease != null) {
-						const cellLinesData = map[r.depMapID.Disease] || [];
-						cellLinesData.push({cellLine: r.depMapID.DepMapID, expression: r.DepmapExpressionValue});
-						map[r.depMapID.Disease] = cellLinesData;
+					if(r.cellLine.Disease != null) {
+						const cellLinesData = mapData[r.cellLine.Disease] || [];
+						cellLinesData.push({cellLine: r.cellLine.DepMapID, expression: r.DepmapExpressionValue});
+						mapData[r.cellLine.Disease] = cellLinesData;
 					}
 				});
 
-				this.setState({ loading: false, data: map });
+				this.setState({ loading: false, data: mapData });
 			})
 			.catch(error => this.setState({ error }));
 	}
@@ -112,9 +112,6 @@ class BarChart extends React.Component {
 			};
 			plotData.push(result);
 		};
-
-		console.log("Plot Data:");
-		console.log(plotData);
 
 		// Create the plot layout
 		var plotLayout = {
